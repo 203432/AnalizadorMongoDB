@@ -1,0 +1,54 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal  use,collection,insertOne,find,updateOne,filter,
+          update, deleteOne, close, ParentesisA, ParentesisC,
+          LlaveA, LlaveC, PuntoDoble,Coma,Comillas,Identificador,Numero,ERROR;
+non terminal INICIO,SENTENCIA_USE, SENTENCIA_COLLECTION, SENTENCIA_CLOSE,OPERACION,
+             OPERACION_INSERT, OPERACION_FIND, OPERACION_UPDATE, OPERACION_DELETE,
+             JSON,CLAVEVALOR, CAMPOS ;
+
+start with INICIO;
+
+
+INICIO ::= SENTENCIA_USE SENTENCIA_COLLECTION OPERACION SENTENCIA_CLOSE
+;
+SENTENCIA_USE ::= use Identificador
+;
+SENTENCIA_COLLECTION ::= collection Identificador
+;
+SENTENCIA_CLOSE ::= close Identificador
+;
+OPERACION ::= OPERACION_INSERT | OPERACION_FIND |OPERACION_UPDATE | OPERACION_DELETE
+;
+
+OPERACION_INSERT ::= insertOne ParentesisA JSON ParentesisC
+;
+OPERACION_FIND ::= find ParentesisA JSON ParentesisC
+;
+OPERACION_UPDATE ::= updateOne ParentesisA filter ParentesisA CLAVEVALOR ParentesisC update ParentesisA CLAVEVALOR ParentesisC ParentesisC
+;
+OPERACION_DELETE ::= deleteOne ParentesisA CLAVEVALOR ParentesisC
+;
+JSON ::= LlaveA CAMPOS LlaveC 
+;
+CAMPOS::= CLAVEVALOR | CLAVEVALOR Coma CAMPOS
+;
+CLAVEVALOR ::= Comillas Identificador Comillas PuntoDoble Comillas Identificador Comillas|
+               
+;
+
